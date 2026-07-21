@@ -1,12 +1,3 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts'
 import type { TimeBreakdown, Period } from '../engine/types'
 import { convertHours } from '../engine/obligations'
 
@@ -53,45 +44,35 @@ export function TimeBar({ breakdown, period }: TimeBarProps) {
     { key: 'freeTime', hours: breakdown.freeTime },
   ].filter((s) => s.hours > 0)
 
-  const data = [
-    segments.reduce(
-      (acc, s) => {
-        acc[s.key] = convertHours(s.hours, period)
-        return acc
-      },
-      {} as Record<string, number>
-    ),
-  ]
-
-  const totalHours = convertHours(24, period)
-
   return (
     <div className="time-bar">
       <div className="time-bar__header">
         <span className="time-bar__title">24-Hour Breakdown</span>
         <span className="time-bar__subtitle">({PERIOD_LABELS[period]})</span>
       </div>
-      <ResponsiveContainer width="100%" height={60}>
-        <BarChart
-          data={data}
-          layout="vertical"
-          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        >
-          <XAxis type="number" domain={[0, totalHours]} hide />
-          <YAxis type="category" dataKey="name" hide />
-          <Tooltip
-            formatter={(value: number, name: string) => [
-              `${value.toFixed(1)} ${PERIOD_LABELS[period]}`,
-              LABELS[name] || name,
-            ]}
-          />
-          {segments.map((s) => (
-            <Bar key={s.key} dataKey={s.key} stackId="time" barSize={40}>
-              <Cell fill={COLORS[s.key] || '#999'} />
-            </Bar>
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="time-bar__bar">
+        {segments.map((s) => {
+          const pct = (s.hours / 24) * 100
+          const display = convertHours(s.hours, period)
+          return (
+            <div
+              key={s.key}
+              className="time-bar__segment"
+              style={{
+                width: `${pct}%`,
+                backgroundColor: COLORS[s.key] || '#999',
+              }}
+              title={`${LABELS[s.key]}: ${display.toFixed(1)} ${PERIOD_LABELS[period]}`}
+            >
+              {pct > 8 && (
+                <span className="time-bar__segment-label">
+                  {display.toFixed(1)}
+                </span>
+              )}
+            </div>
+          )
+        })}
+      </div>
       <div className="time-bar__legend">
         {segments.map((s) => (
           <div key={s.key} className="time-bar__legend-item">
@@ -100,7 +81,7 @@ export function TimeBar({ breakdown, period }: TimeBarProps) {
               style={{ backgroundColor: COLORS[s.key] || '#999' }}
             />
             <span className="time-bar__legend-label">
-              {LABELS[s.key] || s.key}
+              {LABELS[s.key]} — {convertHours(s.hours, period).toFixed(1)} {PERIOD_LABELS[period]}
             </span>
           </div>
         ))}

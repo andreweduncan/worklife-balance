@@ -1,4 +1,4 @@
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import type { AppConfig, Obligation, ObligationConfig } from '../engine/types'
 import { generateId } from '../engine/obligations'
 import defaultsRaw from './defaults.yaml?raw'
