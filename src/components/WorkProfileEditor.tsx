@@ -85,41 +85,7 @@ export function WorkProfileEditor({
         />
       </div>
 
-      {/* Sliders */}
-      <div className="work-profile__sliders">
-        <LabeledSlider
-          label="Job Satisfaction"
-          stops={SATISFACTION_STOPS}
-          value={profile.baselineSatisfaction}
-          onChange={(v) => update({ baselineSatisfaction: v })}
-        />
-
-        <LabeledSlider
-          label="Enjoyment Half-Life"
-          stops={HALF_LIFE_STOPS}
-          value={profile.enjoymentHalfLife}
-          onChange={(v) => update({ enjoymentHalfLife: v })}
-          unit=" hrs"
-        />
-
-        <LabeledSlider
-          label="Career Shelf Life"
-          stops={SHELF_LIFE_STOPS}
-          value={profile.shelfLife}
-          onChange={(v) => update({ shelfLife: v })}
-          step={0.01}
-        />
-
-        <LabeledSlider
-          label="Takes Work Home"
-          stops={TAKES_WORK_HOME_STOPS}
-          value={profile.takesWorkHome}
-          onChange={(v) => update({ takesWorkHome: v })}
-          step={0.01}
-        />
-      </div>
-
-      {/* Pay Rate */}
+      {/* Pay Rate — right under the curve */}
       <div className="work-profile__pay">
         <div className="work-profile__pay-header">
           <span className="work-profile__pay-title">Pay Rate</span>
@@ -194,6 +160,60 @@ export function WorkProfileEditor({
               {' '}({profile.hoursPerWeek}hrs/wk × 52 weeks)
             </span>
           )}
+        </div>
+      </div>
+
+      {/* Sliders */}
+      <div className="work-profile__sliders">
+        <div className="work-profile__slider-group">
+          <LabeledSlider
+            label="Job Satisfaction"
+            stops={SATISFACTION_STOPS}
+            value={profile.baselineSatisfaction}
+            onChange={(v) => update({ baselineSatisfaction: v })}
+          />
+          <p className="work-profile__explainer">
+            How you feel about the work itself in the first hour of the day, before monotony kicks in.
+          </p>
+        </div>
+
+        <div className="work-profile__slider-group">
+          <LabeledSlider
+            label="Enjoyment Half-Life"
+            stops={HALF_LIFE_STOPS}
+            value={profile.enjoymentHalfLife}
+            onChange={(v) => update({ enjoymentHalfLife: v })}
+            unit=" hrs"
+          />
+          <p className="work-profile__explainer">
+            Hours until the work feels half as engaging. Assembly-line work wears thin in 2 hours; a dream job stays interesting past 10.
+          </p>
+        </div>
+
+        <div className="work-profile__slider-group">
+          <LabeledSlider
+            label="Career Shelf Life"
+            stops={SHELF_LIFE_STOPS}
+            value={profile.shelfLife}
+            onChange={(v) => update({ shelfLife: v })}
+            step={0.01}
+          />
+          <p className="work-profile__explainer">
+            How long you could see yourself doing this job before it loses its appeal entirely. Discounts overall satisfaction.
+          </p>
+        </div>
+
+        <div className="work-profile__slider-group">
+          <LabeledSlider
+            label="Takes Work Home"
+            stops={TAKES_WORK_HOME_STOPS}
+            value={profile.takesWorkHome}
+            onChange={(v) => update({ takesWorkHome: v })}
+            step={0.01}
+          />
+          <p className="work-profile__explainer">
+            How much the job bleeds into your off-hours. High values mean your free time is lower quality even when you're not working.
+          </p>
         </div>
       </div>
     </div>
