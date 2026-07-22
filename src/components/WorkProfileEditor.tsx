@@ -85,41 +85,7 @@ export function WorkProfileEditor({
         />
       </div>
 
-      {/* Sliders */}
-      <div className="work-profile__sliders">
-        <LabeledSlider
-          label="Job Satisfaction"
-          stops={SATISFACTION_STOPS}
-          value={profile.baselineSatisfaction}
-          onChange={(v) => update({ baselineSatisfaction: v })}
-        />
-
-        <LabeledSlider
-          label="Enjoyment Half-Life"
-          stops={HALF_LIFE_STOPS}
-          value={profile.enjoymentHalfLife}
-          onChange={(v) => update({ enjoymentHalfLife: v })}
-          unit=" hrs"
-        />
-
-        <LabeledSlider
-          label="Career Shelf Life"
-          stops={SHELF_LIFE_STOPS}
-          value={profile.shelfLife}
-          onChange={(v) => update({ shelfLife: v })}
-          step={0.01}
-        />
-
-        <LabeledSlider
-          label="Takes Work Home"
-          stops={TAKES_WORK_HOME_STOPS}
-          value={profile.takesWorkHome}
-          onChange={(v) => update({ takesWorkHome: v })}
-          step={0.01}
-        />
-      </div>
-
-      {/* Pay Rate */}
+      {/* Pay Rate — right under the curve */}
       <div className="work-profile__pay">
         <div className="work-profile__pay-header">
           <span className="work-profile__pay-title">Pay Rate</span>
@@ -195,6 +161,44 @@ export function WorkProfileEditor({
             </span>
           )}
         </div>
+      </div>
+
+      {/* Sliders */}
+      <div className="work-profile__sliders">
+        <LabeledSlider
+          label="Job Satisfaction"
+          description="How you feel about the work itself in the first hour of the day, before monotony kicks in."
+          stops={SATISFACTION_STOPS}
+          value={profile.baselineSatisfaction}
+          onChange={(v) => update({ baselineSatisfaction: v })}
+        />
+
+        <LabeledSlider
+          label="Enjoyment Half-Life"
+          description="Hours until the work feels half as engaging. Assembly-line work wears thin in 2 hours; a dream job stays interesting past 10."
+          stops={HALF_LIFE_STOPS}
+          value={profile.enjoymentHalfLife}
+          onChange={(v) => update({ enjoymentHalfLife: v })}
+          unit=" hrs"
+        />
+
+        <LabeledSlider
+          label="Career Shelf Life"
+          description="How long you could see yourself doing this job before it loses its appeal entirely. Discounts overall satisfaction."
+          stops={SHELF_LIFE_STOPS}
+          value={profile.shelfLife}
+          onChange={(v) => update({ shelfLife: v })}
+          step={0.01}
+        />
+
+        <LabeledSlider
+          label="Takes Work Home"
+          description="How much the job bleeds into your off-hours. High values mean your free time is lower quality even when you're not working."
+          stops={TAKES_WORK_HOME_STOPS}
+          value={profile.takesWorkHome}
+          onChange={(v) => update({ takesWorkHome: v })}
+          step={0.01}
+        />
       </div>
     </div>
   )

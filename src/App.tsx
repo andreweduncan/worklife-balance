@@ -37,7 +37,7 @@ function App() {
   const [period, setPeriod] = useState<Period>('day')
   const [activeTab, setActiveTab] = useState<
     'obligations' | 'work' | 'financial'
-  >('obligations')
+  >('work')
 
   const totalObligationHours = useMemo(
     () => obligations.filter((o) => o.isActive).reduce((sum, o) => sum + o.hoursPerDay, 0),
@@ -125,16 +125,16 @@ function App() {
       <section className="app__tabs">
         <div className="tab-bar">
           <button
-            className={`tab-bar__tab ${activeTab === 'obligations' ? 'tab-bar__tab--active' : ''}`}
-            onClick={() => setActiveTab('obligations')}
-          >
-            Obligations
-          </button>
-          <button
             className={`tab-bar__tab ${activeTab === 'work' ? 'tab-bar__tab--active' : ''}`}
             onClick={() => setActiveTab('work')}
           >
             Work Profile
+          </button>
+          <button
+            className={`tab-bar__tab ${activeTab === 'obligations' ? 'tab-bar__tab--active' : ''}`}
+            onClick={() => setActiveTab('obligations')}
+          >
+            Obligations
           </button>
           <button
             className={`tab-bar__tab ${activeTab === 'financial' ? 'tab-bar__tab--active' : ''}`}

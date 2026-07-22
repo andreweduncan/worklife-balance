@@ -559,6 +559,15 @@
   gap: 24px;
 }
 
+.labeled-slider__description {
+  font-size: 12px;
+  color: var(--text);
+  margin: 0;
+  padding-left: 2px;
+  opacity: 0.75;
+  line-height: 1.4;
+}
+
 /* Satisfaction Curve SVG */
 .satisfaction-curve {
   width: 100%;

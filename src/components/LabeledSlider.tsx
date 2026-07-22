@@ -18,6 +18,8 @@ interface LabeledSliderProps {
   step?: number
   /** Override the maximum value (caps below the highest stop) */
   maxValue?: number
+  /** Description shown between the label and the slider */
+  description?: string
 }
 
 export function LabeledSlider({
@@ -30,6 +32,7 @@ export function LabeledSlider({
   snap = false,
   step: customStep,
   maxValue,
+  description,
 }: LabeledSliderProps) {
   const min = Math.min(...stops.map((s) => s.value))
   const stopsMax = Math.max(...stops.map((s) => s.value))
@@ -73,6 +76,9 @@ export function LabeledSlider({
             </span>
           )}
         </div>
+      )}
+      {description && (
+        <p className="labeled-slider__description">{description}</p>
       )}
       <div className="labeled-slider__track-container">
         <input

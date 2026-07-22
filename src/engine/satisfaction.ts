@@ -4,6 +4,11 @@ export function monotonyRate(halfLife: number): number {
   return Math.LN2 / halfLife
 }
 
+function rawSatisfaction(baseline: number, rate: number, h: number): number {
+  const decay = 1 - Math.exp(-rate * h)
+  return baseline - Math.abs(baseline) * decay
+}
+
 export function calculateWorkSatisfaction(
   hoursPerDay: number,
   baselineSatisfaction: number,
@@ -12,8 +17,7 @@ export function calculateWorkSatisfaction(
 ): number {
   if (hoursPerDay <= 0) return 0
   const rate = monotonyRate(halfLife)
-  const rawSat = baselineSatisfaction * Math.exp(-rate * hoursPerDay)
-  return rawSat * shelfLife
+  return rawSatisfaction(baselineSatisfaction, rate, hoursPerDay) * shelfLife
 }
 
 export function calculateSatisfactionCurve(
@@ -27,7 +31,7 @@ export function calculateSatisfactionCurve(
   const points: SatisfactionPoint[] = []
   for (let i = 0; i <= steps; i++) {
     const h = (i / steps) * maxHours
-    const sat = baselineSatisfaction * Math.exp(-rate * h) * shelfLife
+    const sat = rawSatisfaction(baselineSatisfaction, rate, h) * shelfLife
     points.push({ hours: h, satisfaction: sat })
   }
   return points
