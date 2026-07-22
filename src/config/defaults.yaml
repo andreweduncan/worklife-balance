@@ -1,5 +1,15 @@
 workHoursPerDay: 8
 
+jobProfile:
+  baselineSatisfaction: 15      # "It's fine"
+  enjoymentHalfLife: 6          # hours until satisfaction drops to 50%
+  shelfLife: 0.9                # "Many years"
+  takesWorkHome: 0.1            # "Occasional thoughts"
+  payMode: salary
+  salary: 75000
+  hoursPerWeek: 40
+  hourlyRate: 36
+
 obligations:
   - name: Sleep
     defaultHoursPerDay: 8

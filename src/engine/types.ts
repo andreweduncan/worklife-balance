@@ -24,9 +24,39 @@ export interface ObligationConfig {
   }
 }
 
+export type PayMode = 'salary' | 'hourly'
+
+export interface JobProfile {
+  baselineSatisfaction: number
+  enjoymentHalfLife: number
+  shelfLife: number
+  takesWorkHome: number
+  payMode: PayMode
+  salary: number
+  hoursPerWeek: number
+  hourlyRate: number
+}
+
+export interface JobProfileConfig {
+  baselineSatisfaction: number
+  enjoymentHalfLife: number
+  shelfLife: number
+  takesWorkHome: number
+  payMode: PayMode
+  salary: number
+  hoursPerWeek: number
+  hourlyRate: number
+}
+
+export interface SatisfactionPoint {
+  hours: number
+  satisfaction: number
+}
+
 export interface AppConfig {
   obligations: ObligationConfig[]
   workHoursPerDay: number
+  jobProfile: JobProfileConfig
 }
 
 export interface TimeBreakdown {

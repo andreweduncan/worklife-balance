@@ -1,13 +1,14 @@
-import { useState, useMemo } from 'react'
-import type { Obligation, Period } from './engine/types'
+import { useState, useMemo, useEffect } from 'react'
+import type { JobProfile, Obligation, Period } from './engine/types'
 import {
   calculateTimeBreakdown,
   calculateEliminationCostPerYear,
   convertHours,
 } from './engine/obligations'
-import { loadDefaults, obligationsFromConfig } from './config/loadConfig'
+import { loadDefaults, jobProfileFromConfig, obligationsFromConfig } from './config/loadConfig'
 import { TimeBar } from './components/TimeBar'
 import { ObligationEditor } from './components/ObligationEditor'
+import { WorkProfileEditor } from './components/WorkProfileEditor'
 import { PeriodToggle } from './components/PeriodToggle'
 import { LabeledSlider } from './components/LabeledSlider'
 import './App.css'
@@ -30,10 +31,25 @@ function App() {
   const [workHoursPerDay, setWorkHoursPerDay] = useState(
     defaults.workHoursPerDay
   )
+  const [jobProfile, setJobProfile] = useState<JobProfile>(() =>
+    jobProfileFromConfig(defaults.jobProfile)
+  )
   const [period, setPeriod] = useState<Period>('day')
   const [activeTab, setActiveTab] = useState<
     'obligations' | 'work' | 'financial'
   >('obligations')
+
+  const totalObligationHours = useMemo(
+    () => obligations.filter((o) => o.isActive).reduce((sum, o) => sum + o.hoursPerDay, 0),
+    [obligations]
+  )
+  const maxWorkHours = Math.max(0, 24 - totalObligationHours)
+
+  useEffect(() => {
+    if (workHoursPerDay > maxWorkHours) {
+      setWorkHoursPerDay(Math.round(maxWorkHours * 4) / 4)
+    }
+  }, [maxWorkHours])
 
   const breakdown = useMemo(
     () => calculateTimeBreakdown(workHoursPerDay, obligations),
@@ -95,7 +111,13 @@ function App() {
             value={workHoursPerDay}
             onChange={setWorkHoursPerDay}
             unit=" hrs"
+            maxValue={maxWorkHours}
           />
+          {maxWorkHours < 16 && (
+            <div className="work-hours-cap">
+              Limited by obligations ({maxWorkHours.toFixed(1)} hrs available)
+            </div>
+          )}
         </div>
       </div>
 
@@ -131,13 +153,11 @@ function App() {
             />
           )}
           {activeTab === 'work' && (
-            <div className="placeholder-tab">
-              <p>Work Profile — coming soon</p>
-              <p className="placeholder-hint">
-                Job satisfaction, monotony curves, career trajectory, "takes
-                work home" factor
-              </p>
-            </div>
+            <WorkProfileEditor
+              profile={jobProfile}
+              onChange={setJobProfile}
+              workHoursPerDay={workHoursPerDay}
+            />
           )}
           {activeTab === 'financial' && (
             <div className="placeholder-tab">

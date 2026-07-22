@@ -14,6 +14,10 @@ interface LabeledSliderProps {
   showValue?: boolean
   /** If true, slider snaps to stop values only. If false, continuous between min/max. */
   snap?: boolean
+  /** Custom step size for continuous mode (default 0.25) */
+  step?: number
+  /** Override the maximum value (caps below the highest stop) */
+  maxValue?: number
 }
 
 export function LabeledSlider({
@@ -24,10 +28,13 @@ export function LabeledSlider({
   unit = '',
   showValue = true,
   snap = false,
+  step: customStep,
+  maxValue,
 }: LabeledSliderProps) {
   const min = Math.min(...stops.map((s) => s.value))
-  const max = Math.max(...stops.map((s) => s.value))
-  const step = snap ? undefined : 0.25
+  const stopsMax = Math.max(...stops.map((s) => s.value))
+  const max = maxValue !== undefined ? Math.min(maxValue, stopsMax) : stopsMax
+  const step = snap ? undefined : (customStep ?? 0.25)
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,9 +55,10 @@ export function LabeledSlider({
     () =>
       stops.map((s) => ({
         ...s,
-        percent: max === min ? 50 : ((s.value - min) / (max - min)) * 100,
+        percent: stopsMax === min ? 50 : ((s.value - min) / (stopsMax - min)) * 100,
+        disabled: s.value > max,
       })),
-    [stops, min, max]
+    [stops, min, max, stopsMax]
   )
 
   return (
@@ -72,15 +80,19 @@ export function LabeledSlider({
           min={min}
           max={max}
           step={step}
-          value={value}
+          value={Math.min(value, max)}
           onChange={handleChange}
           className="labeled-slider__input"
+          style={maxValue !== undefined && max < stopsMax
+            ? { width: `${((max - min) / (stopsMax - min)) * 100}%` }
+            : undefined
+          }
         />
         <div className="labeled-slider__stops">
           {stopPositions.map((s) => (
             <div
               key={s.value}
-              className="labeled-slider__stop"
+              className={`labeled-slider__stop ${s.disabled ? 'labeled-slider__stop--disabled' : ''}`}
               style={{ left: `${s.percent}%` }}
             >
               <div className="labeled-slider__tick" />
