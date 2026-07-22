@@ -559,13 +559,7 @@
   gap: 24px;
 }
 
-.work-profile__slider-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.work-profile__explainer {
+.labeled-slider__description {
   font-size: 12px;
   color: var(--text);
   margin: 0;
