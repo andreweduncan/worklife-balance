@@ -1,0 +1,43 @@
+workHoursPerDay: 8
+
+obligations:
+  - name: Sleep
+    defaultHoursPerDay: 8
+    category: biological
+
+  - name: Personal Hygiene
+    defaultHoursPerDay: 0.75
+    category: biological
+
+  - name: Meals (prep & eating)
+    defaultHoursPerDay: 1.5
+    category: household
+    costToEliminate:
+      amount: 400
+      period: month
+
+  - name: Commute
+    defaultHoursPerDay: 1
+    category: transport
+
+  - name: Household Cleaning
+    defaultHoursPerDay: 0.5
+    category: household
+    costToEliminate:
+      amount: 150
+      period: month
+
+  - name: Errands & Shopping
+    defaultHoursPerDay: 0.5
+    category: household
+    costToEliminate:
+      amount: 100
+      period: month
+
+  - name: Childcare / Dependents
+    defaultHoursPerDay: 0
+    category: personal
+
+  - name: Exercise
+    defaultHoursPerDay: 0.5
+    category: personal

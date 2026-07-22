@@ -1,121 +1,156 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useMemo } from 'react'
+import type { Obligation, Period } from './engine/types'
+import {
+  calculateTimeBreakdown,
+  calculateEliminationCostPerYear,
+  convertHours,
+} from './engine/obligations'
+import { loadDefaults, obligationsFromConfig } from './config/loadConfig'
+import { TimeBar } from './components/TimeBar'
+import { ObligationEditor } from './components/ObligationEditor'
+import { PeriodToggle } from './components/PeriodToggle'
+import { LabeledSlider } from './components/LabeledSlider'
 import './App.css'
 
+const defaults = loadDefaults()
+
+const WORK_HOUR_STOPS = [
+  { label: 'None', value: 0 },
+  { label: 'Part-time', value: 4 },
+  { label: 'Standard', value: 8 },
+  { label: 'Overtime', value: 10 },
+  { label: 'Crunch', value: 12 },
+  { label: 'No life', value: 16 },
+]
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [obligations, setObligations] = useState<Obligation[]>(() =>
+    obligationsFromConfig(defaults.obligations)
+  )
+  const [workHoursPerDay, setWorkHoursPerDay] = useState(
+    defaults.workHoursPerDay
+  )
+  const [period, setPeriod] = useState<Period>('day')
+  const [activeTab, setActiveTab] = useState<
+    'obligations' | 'work' | 'financial'
+  >('obligations')
+
+  const breakdown = useMemo(
+    () => calculateTimeBreakdown(workHoursPerDay, obligations),
+    [workHoursPerDay, obligations]
+  )
+
+  const eliminationCost = useMemo(
+    () => calculateEliminationCostPerYear(obligations),
+    [obligations]
+  )
+
+  const freeTimeDisplay = convertHours(breakdown.freeTime, period)
+  const periodLabel =
+    period === 'day'
+      ? 'hrs/day'
+      : period === 'week'
+        ? 'hrs/week'
+        : period === 'month'
+          ? 'hrs/month'
+          : 'hrs/year'
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <header className="app__header">
+        <h1>WorkLife Balance</h1>
+        <p className="app__subtitle">
+          Understand where your time goes. Find your trade-offs.
+        </p>
+      </header>
+
+      {/* Top: Visualization */}
+      <section className="app__viz">
+        <div className="free-time-display">
+          <span className="free-time-display__number">
+            {freeTimeDisplay.toFixed(1)}
+          </span>
+          <span className="free-time-display__unit">{periodLabel}</span>
+          <span className="free-time-display__label">Free Time</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+
+        <TimeBar breakdown={breakdown} period={period} />
+
+        {eliminationCost > 0 && (
+          <div className="elimination-cost">
+            You're spending{' '}
+            <strong>${eliminationCost.toLocaleString()}/year</strong> to
+            eliminate obligations
+          </div>
+        )}
       </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Controls bar */}
+      <div className="app__controls">
+        <PeriodToggle value={period} onChange={setPeriod} />
+        <div className="work-hours-slider">
+          <LabeledSlider
+            label="Work Hours / Day"
+            stops={WORK_HOUR_STOPS}
+            value={workHoursPerDay}
+            onChange={setWorkHoursPerDay}
+            unit=" hrs"
+          />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+      </div>
+
+      {/* Bottom: Tabs */}
+      <section className="app__tabs">
+        <div className="tab-bar">
+          <button
+            className={`tab-bar__tab ${activeTab === 'obligations' ? 'tab-bar__tab--active' : ''}`}
+            onClick={() => setActiveTab('obligations')}
+          >
+            Obligations
+          </button>
+          <button
+            className={`tab-bar__tab ${activeTab === 'work' ? 'tab-bar__tab--active' : ''}`}
+            onClick={() => setActiveTab('work')}
+          >
+            Work Profile
+          </button>
+          <button
+            className={`tab-bar__tab ${activeTab === 'financial' ? 'tab-bar__tab--active' : ''}`}
+            onClick={() => setActiveTab('financial')}
+          >
+            Financial
+          </button>
+        </div>
+
+        <div className="tab-content">
+          {activeTab === 'obligations' && (
+            <ObligationEditor
+              obligations={obligations}
+              onChange={setObligations}
+              period={period}
+            />
+          )}
+          {activeTab === 'work' && (
+            <div className="placeholder-tab">
+              <p>Work Profile — coming soon</p>
+              <p className="placeholder-hint">
+                Job satisfaction, monotony curves, career trajectory, "takes
+                work home" factor
+              </p>
+            </div>
+          )}
+          {activeTab === 'financial' && (
+            <div className="placeholder-tab">
+              <p>Financial — coming soon</p>
+              <p className="placeholder-hint">
+                Pay rate, salary vs hourly, financial goals, money satisfaction
+                curve
+              </p>
+            </div>
+          )}
         </div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </div>
   )
 }
 
