@@ -10,6 +10,10 @@ jobProfile:
   hoursPerWeek: 40
   hourlyRate: 36
 
+financial:
+  baselineNeeds: 30000            # minimum annual income to survive
+  moneySensitivity: 30            # how fast money satisfaction diminishes (lower = flattens faster)
+
 obligations:
   - name: Sleep
     defaultHoursPerDay: 8

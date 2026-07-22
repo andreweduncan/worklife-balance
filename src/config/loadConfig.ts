@@ -1,5 +1,5 @@
 import * as yaml from 'js-yaml'
-import type { AppConfig, JobProfile, JobProfileConfig, Obligation, ObligationConfig } from '../engine/types'
+import type { AppConfig, FinancialProfile, FinancialProfileConfig, JobProfile, JobProfileConfig, Obligation, ObligationConfig } from '../engine/types'
 import { generateId } from '../engine/obligations'
 import defaultsRaw from './defaults.yaml?raw'
 
@@ -8,6 +8,10 @@ export function loadDefaults(): AppConfig {
 }
 
 export function jobProfileFromConfig(config: JobProfileConfig): JobProfile {
+  return { ...config }
+}
+
+export function financialFromConfig(config: FinancialProfileConfig): FinancialProfile {
   return { ...config }
 }
 
