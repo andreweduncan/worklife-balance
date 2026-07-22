@@ -57,6 +57,32 @@ export interface AppConfig {
   obligations: ObligationConfig[]
   workHoursPerDay: number
   jobProfile: JobProfileConfig
+  financial: FinancialProfileConfig
+}
+
+export interface FinancialProfile {
+  baselineNeeds: number
+  moneySensitivity: number
+}
+
+export interface FinancialProfileConfig {
+  baselineNeeds: number
+  moneySensitivity: number
+}
+
+export interface QoLResult {
+  compositeQoL: number
+  workSat: number
+  freeTimeSat: number
+  freeTime: number
+  income: number
+  disposableIncome: number
+  optimalHours: number
+}
+
+export interface QoLPoint {
+  hours: number
+  qol: number
 }
 
 export interface TimeBreakdown {

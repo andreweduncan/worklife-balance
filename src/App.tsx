@@ -1,14 +1,17 @@
 import { useState, useMemo, useEffect } from 'react'
-import type { JobProfile, Obligation, Period } from './engine/types'
+import type { FinancialProfile, JobProfile, Obligation, Period } from './engine/types'
 import {
   calculateTimeBreakdown,
   calculateEliminationCostPerYear,
   convertHours,
 } from './engine/obligations'
-import { loadDefaults, jobProfileFromConfig, obligationsFromConfig } from './config/loadConfig'
+import { calculateFullQoL, calculateQoLCurve } from './engine/qol'
+import { loadDefaults, jobProfileFromConfig, financialFromConfig, obligationsFromConfig } from './config/loadConfig'
 import { TimeBar } from './components/TimeBar'
+import { QoLCurve } from './components/QoLCurve'
 import { ObligationEditor } from './components/ObligationEditor'
 import { WorkProfileEditor } from './components/WorkProfileEditor'
+import { FinancialEditor } from './components/FinancialEditor'
 import { PeriodToggle } from './components/PeriodToggle'
 import { LabeledSlider } from './components/LabeledSlider'
 import './App.css'
@@ -33,6 +36,9 @@ function App() {
   )
   const [jobProfile, setJobProfile] = useState<JobProfile>(() =>
     jobProfileFromConfig(defaults.jobProfile)
+  )
+  const [financial, setFinancial] = useState<FinancialProfile>(() =>
+    financialFromConfig(defaults.financial)
   )
   const [period, setPeriod] = useState<Period>('day')
   const [activeTab, setActiveTab] = useState<
@@ -61,6 +67,16 @@ function App() {
     [obligations]
   )
 
+  const qolResult = useMemo(
+    () => calculateFullQoL(workHoursPerDay, obligations, jobProfile, financial),
+    [workHoursPerDay, obligations, jobProfile, financial]
+  )
+
+  const qolCurve = useMemo(
+    () => calculateQoLCurve(obligations, jobProfile, financial),
+    [obligations, jobProfile, financial]
+  )
+
   const freeTimeDisplay = convertHours(breakdown.freeTime, period)
   const periodLabel =
     period === 'day'
@@ -82,12 +98,42 @@ function App() {
 
       {/* Top: Visualization */}
       <section className="app__viz">
-        <div className="free-time-display">
-          <span className="free-time-display__number">
-            {freeTimeDisplay.toFixed(1)}
-          </span>
-          <span className="free-time-display__unit">{periodLabel}</span>
-          <span className="free-time-display__label">Free Time</span>
+        <div className="app__viz-scores">
+          <div className="score-display">
+            <span className="score-display__number">
+              {qolResult.compositeQoL.toFixed(1)}
+            </span>
+            <span className="score-display__label">Quality of Life</span>
+            {qolResult.optimalHours !== workHoursPerDay && (
+              <span className="score-display__hint">
+                Optimal at {qolResult.optimalHours.toFixed(1)} hrs/day
+              </span>
+            )}
+          </div>
+          <div className="free-time-display">
+            <span className="free-time-display__number">
+              {freeTimeDisplay.toFixed(1)}
+            </span>
+            <span className="free-time-display__unit">{periodLabel}</span>
+            <span className="free-time-display__label">Free Time</span>
+          </div>
+        </div>
+
+        <div className="app__viz-charts">
+          <div className="app__viz-chart">
+            <div className="app__viz-chart-header">
+              <span className="app__viz-chart-title">QoL vs Work Hours</span>
+              <span className="app__viz-chart-subtitle">
+                Find the sweet spot between income and free time
+              </span>
+            </div>
+            <QoLCurve
+              curve={qolCurve}
+              currentHours={workHoursPerDay}
+              optimalHours={qolResult.optimalHours}
+              currentQoL={qolResult.compositeQoL}
+            />
+          </div>
         </div>
 
         <TimeBar breakdown={breakdown} period={period} />
@@ -160,13 +206,13 @@ function App() {
             />
           )}
           {activeTab === 'financial' && (
-            <div className="placeholder-tab">
-              <p>Financial — coming soon</p>
-              <p className="placeholder-hint">
-                Pay rate, salary vs hourly, financial goals, money satisfaction
-                curve
-              </p>
-            </div>
+            <FinancialEditor
+              financial={financial}
+              onChange={setFinancial}
+              workHoursPerDay={workHoursPerDay}
+              jobProfile={jobProfile}
+              obligations={obligations}
+            />
           )}
         </div>
       </section>

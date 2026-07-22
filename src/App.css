@@ -501,23 +501,274 @@
 }
 
 /* ==============================
-   Placeholder Tabs
+   Score Displays
    ============================== */
-.placeholder-tab {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--text);
+.app__viz-scores {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.placeholder-tab p:first-child {
-  font-size: 18px;
-  font-weight: 500;
+.score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.score-display__number {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-display__label {
+  font-size: 13px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.score-display__hint {
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* ==============================
+   QoL Chart Area
+   ============================== */
+.app__viz-charts {
+  width: 100%;
+}
+
+.app__viz-chart {
+  width: 100%;
+}
+
+.app__viz-chart-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.app__viz-chart-title {
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-h);
 }
 
-.placeholder-hint {
+.app__viz-chart-subtitle {
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* ==============================
+   QoL Curve SVG
+   ============================== */
+.qol-curve {
+  width: 100%;
+  height: auto;
+}
+
+.qol-curve__grid {
+  stroke: var(--border);
+  stroke-width: 0.5;
+  stroke-dasharray: 3 3;
+}
+
+.qol-curve__zero {
+  stroke: var(--text);
+  stroke-width: 0.75;
+  stroke-dasharray: 4 2;
+  opacity: 0.5;
+}
+
+.qol-curve__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.qol-curve__current-line {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+
+.qol-curve__current-dot {
+  fill: var(--accent);
+  stroke: var(--bg);
+  stroke-width: 2;
+}
+
+.qol-curve__current-label {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--accent);
+  font-family: var(--sans);
+}
+
+.qol-curve__optimal-line {
+  stroke: #22c55e;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+
+.qol-curve__optimal-dot {
+  fill: #22c55e;
+  stroke: var(--bg);
+  stroke-width: 2;
+}
+
+.qol-curve__optimal-label {
+  font-size: 10px;
+  font-weight: 600;
+  fill: #22c55e;
+  font-family: var(--sans);
+}
+
+.qol-curve__axis-label {
+  font-size: 9px;
+  fill: var(--text);
+  font-family: var(--sans);
+}
+
+/* ==============================
+   Financial Editor
+   ============================== */
+.financial {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.financial__summary {
+  background: var(--code-bg);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.financial__summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.financial__summary-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.financial__summary-rate {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.financial__flow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.financial__flow-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   font-size: 14px;
-  margin-top: 8px;
+  color: var(--text-h);
+}
+
+.financial__flow-row--sub {
+  padding-left: 16px;
+  font-size: 13px;
+}
+
+.financial__flow-row--total {
+  font-weight: 600;
+}
+
+.financial__flow-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.financial__flow-amount--positive {
+  color: #22c55e;
+}
+
+.financial__flow-amount--negative {
+  color: #ef4444;
+}
+
+.financial__flow-amount--zero {
+  color: var(--text);
+}
+
+.financial__flow-detail {
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.financial__flow-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.financial__flow-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.financial__flow-divider--total {
+  background: var(--text);
+  opacity: 0.3;
+}
+
+.financial__satisfaction-badge {
+  font-size: 13px;
+  color: var(--text);
+  text-align: center;
+  padding: 6px;
+  background: var(--accent-bg);
+  border-radius: 6px;
+}
+
+.financial__satisfaction-badge strong {
+  color: var(--accent);
+}
+
+.financial__sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.financial__slider-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin-top: -16px;
+  text-align: right;
 }
 
 /* ==============================
