@@ -261,6 +261,17 @@
   margin-top: 2px;
 }
 
+.labeled-slider__stop--disabled {
+  opacity: 0.25;
+}
+
+.work-hours-cap {
+  font-size: 12px;
+  color: var(--text);
+  margin-top: -16px;
+  padding: 4px 0;
+}
+
 /* ==============================
    Tab Bar
    ============================== */
@@ -507,4 +518,221 @@
 .placeholder-hint {
   font-size: 14px;
   margin-top: 8px;
+}
+
+/* ==============================
+   Work Profile
+   ============================== */
+.work-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.work-profile__viz {
+  background: var(--code-bg);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.work-profile__viz-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.work-profile__viz-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.work-profile__viz-subtitle {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.work-profile__sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Satisfaction Curve SVG */
+.satisfaction-curve {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.satisfaction-curve__grid {
+  stroke: var(--border);
+  stroke-width: 0.5;
+  stroke-dasharray: 3 3;
+}
+
+.satisfaction-curve__zero {
+  stroke: var(--text);
+  stroke-width: 0.75;
+  stroke-dasharray: 4 2;
+  opacity: 0.5;
+}
+
+.satisfaction-curve__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.satisfaction-curve__marker-line {
+  stroke: var(--text);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.5;
+}
+
+.satisfaction-curve__marker-dot {
+  fill: var(--accent);
+  stroke: var(--bg);
+  stroke-width: 2;
+}
+
+.satisfaction-curve__marker-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--accent);
+  font-family: var(--sans);
+}
+
+.satisfaction-curve__axis-label {
+  font-size: 9px;
+  fill: var(--text);
+  font-family: var(--sans);
+}
+
+/* Pay Rate Section */
+.work-profile__pay {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.work-profile__pay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.work-profile__pay-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.work-profile__pay-toggle {
+  display: flex;
+  background: var(--code-bg);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.work-profile__pay-btn {
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all 0.15s;
+}
+
+.work-profile__pay-btn--active {
+  background: var(--bg);
+  color: var(--text-h);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.work-profile__pay-btn:hover:not(.work-profile__pay-btn--active) {
+  color: var(--text-h);
+}
+
+.work-profile__pay-fields {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.work-profile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.work-profile__field-label {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.work-profile__input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.work-profile__input-prefix {
+  padding: 6px 0 6px 10px;
+  color: var(--text);
+  font-size: 14px;
+  user-select: none;
+}
+
+.work-profile__input-wrap .work-profile__input {
+  border: none;
+  border-radius: 0;
+  padding-left: 2px;
+}
+
+.work-profile__input {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  width: 140px;
+}
+
+.work-profile__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.work-profile__input-wrap:focus-within {
+  border-color: var(--accent);
+}
+
+.work-profile__pay-summary {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.work-profile__pay-summary strong {
+  color: var(--text-h);
+}
+
+.work-profile__pay-detail {
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.7;
 }
